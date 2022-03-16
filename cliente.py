@@ -1,5 +1,6 @@
 # import socket
 from socket import socket
+import random
 import sys
 
 s = socket()
@@ -13,22 +14,13 @@ except ConnectionRefusedError:
     print('El servidor no esta activo')
     print('Saliendo ...')
     sys.exit()
-# except ConnectionResetError:
-#     print('El servidor se desconecto')
-#     print('Saliendo ...')
-#     sys.exit()
 
 while True:
+    r = str(random.randint(1, 3))
     res = str(s.recv(25))
-    if res[3] == '2':
-        t1 = 'disponible, manda tu respuesta'
-    else:
-        t1 = 'no disponible'
-    print(f'Servidor:{res}')
-    print(f'Soy cliente:[{res[3]}]. Juego {t1}.')
-
-    msg = f'J:{res[8]}|JJ:Tij'
+    noJuegos = res[9]
+    msg = f'C:[{res[3]}] DE:{noJuegos}|JJ:{res[14]}|RE:{r}'
     s.send(msg.encode())
-
+    print(f'C:[{res[3]}] DE:{noJuegos}|JJ:{res[14]}|RE:{r}')
 
 s.close()

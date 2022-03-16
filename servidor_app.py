@@ -4,11 +4,6 @@ from socket import socket
 #import socket
 import sys
 
-# except ConnectionResetError:
-#     print('Desconexion de clientes')
-#     print('Saliendo ...')
-#     sys.exit()
-
 def trabajo(sock, tid):
     
     msg = f'[{tid}] Recibido'
@@ -17,21 +12,23 @@ def trabajo(sock, tid):
 
     salir = False
     noJuegos = 0
-    jDisponible = False
-    respuesta = 0
+    jDisponible = '0'
 
     while not salir:
-
+        res = str(sock.recv(25))
+        resJuego = res[21]
         if contador == 2:
-            msg = f'[{tid}] J:{contador}|P:{noJuegos}|D:{jDisponible}|R:{respuesta}'
-            
+            jDisponible = '1'
+            msg = f'[{tid}] DE:{jDisponible}|JJ:{noJuegos}|RE:{resJuego}'      
         elif contador == 1:
-            msg = f'[{tid}] J:{contador}|P:{noJuegos}|D:{jDisponible}|R:{respuesta}'
+            jDisponible = '0'
+            msg = f'[{tid}] DE:{jDisponible}|JJ:{noJuegos}|RE:{resJuego}'
+        #   tid*4 jdis*9 noju*14 res*19
         else:
-            msg = f'[{tid}] Actualizacion'
-        res = str(sock.recv(20))
+            msg = f'[{tid}] En espera'
+
         sock.send(msg.encode())
-        print(msg + res)
+        print(msg)
         time.sleep(5)
 
     sock.close()
@@ -52,22 +49,3 @@ while True:
     print(f'[{contador}] Direccion: {addr}')
     t = Thread(target=trabajo, args=(conn, contador))
     t.start()
-
-
-# def trabajo(sock):
-#     sock.send(b'recibido')
-#     time.sleep(20)
-#     sock.send(b'espera terminada')
-#     sock.close()
-
-# def sleeper(i):
-#     print(f'Thread {i} espera {10-1} segundos')
-#     time.sleep(10 - 2*1)
-#     print(f'Thread - {i} termina')
-
-# for i in range(10):
-#     print(f'Creando Thread {i}')
-#     t = Thread(target = sleeper, args = (i,))
-#     t.start()
-
-# print('Fin')
