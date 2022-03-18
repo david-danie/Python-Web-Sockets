@@ -13,6 +13,22 @@ noConexiones = 0
 resClientes = ['0', '0']
 
 noConexiones = 0
+def hilo_imp():
+    while True:
+        time.sleep(5)
+        #print(f'C1: {resClientes[0]} | C2: {resClientes[1]}.')
+        if resClientes[0] == resClientes[1]:
+            print('Empate!')
+        else:
+            if resClientes[0] == '1' and resClientes[1] == '2':
+                print('Gano 2')
+            elif resClientes[0] == '2' and resClientes[1] == '3':
+                print('Gano 2')
+            elif resClientes[0] == '3' and resClientes[1] == '1':
+                print('Gano 2')
+            else:
+                print('Gano 1')
+        print(f'C1: {resClientes[0]} | C2: {resClientes[1]}.')
 
 def hilo_cliente(sock, noCliente):
 
@@ -47,15 +63,17 @@ def hilo_cliente(sock, noCliente):
         else:
             resClientes[noCliente - 1] = resJuego
             t1 = 'tijera'
-        print(f'El cliente [{res[4]}] ha seleccionado {t1}, en la ronda {noJuegos}.')
+        print(f'Cliente[{res[4]}] selecciono {t1}, en la ronda {noJuegos}.')
         time.sleep(5)
 
     sock.close()
 
 if __name__ == '__main__':
     
-    print('dn')
-    time.sleep(3)
+    # print('dn')
+    # time.sleep(3)
+    t3 = Thread(target = hilo_imp)
+    t3.start()
     while True:
         print(f'Esperando conexion. C1: {resClientes[0]} | C2: {resClientes[1]}.')
         try:
