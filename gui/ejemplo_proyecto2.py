@@ -11,13 +11,13 @@ server_host = 'localhost'
 server_port = 9999
 respuestaEnviar = ['0', '0', '0']
 record = [0, 0, 0]
-noJuegos = 0
-respuesta = '1'
+#noJuegos = 0
+#respuesta = '0'
 jugando = False
 
 class QtWindow(QMainWindow):
-
-    def __init__(self):
+    
+    def __init__(self, respuesta, noJuegos):
 
         super(QtWindow, self).__init__()
         self.ui = Ui_VENTANA_PRINCIPAL()
@@ -28,6 +28,8 @@ class QtWindow(QMainWindow):
         self.ui.PIEDRA.clicked.connect(self.botonPiedra)
         self.ui.PAPEL.clicked.connect(self.botonPapel)
         self.ui.TIJERA.clicked.connect(self.botonTijera)
+        self.respuesta = respuesta
+        self.noJuegos = noJuegos
     
     # def get_respuesta(self):
     #     return self.respuesta 
@@ -36,32 +38,35 @@ class QtWindow(QMainWindow):
     #     self.respuesta = r
         
     def botondejugar(self):
-        if respuesta == '0':
-            print('Selecciona una opción')
+        if not self.respuesta == '0':
+            if self.noJuegos < MAX_JUEGOS:
+                msg = f'C[1]: DE:1|JJ:{self.noJuegos}|RE:{self.respuesta}'
+                s.send(msg.encode())
+                print(msg)
+                print(f'Mandaste tu respuesta: {msg}.') 
+                self.noJuegos += 1
+            else:
+                self.noJuegos = 0
+                print('Se reinició cuenta')                
         else:
-            print('INICIA JUEGO')        
-            msg = f'C[1]: DE:1|JJ:2|RE:{respuesta}'
-            s.send(msg.encode())
-            print(msg)
-            #noJuegos =+ 1
+            print('Selecciona una opción')
         
     def botondecerrar(self):
         print('FIN DEL JUEGO')
 
     def botonPiedra(self):
-        respuesta = '1'
-        print('SELECCIONO PIEDRA')
-        return respuesta
+        self.respuesta = '1'
+        print('SELECCIONÓ PIEDRA')
  
     def botonPapel(self):
-        respuesta = '2'
-        print('SELECCIONO PAPEL') 
-        return respuesta
+        self.respuesta = '2'
+        print('SELECCIONÓ PAPEL') 
 
     def botonTijera(self):
-        respuesta = '3'
-        print('SELECCIONO TIJERA')
-        return respuesta
+        self.respuesta = '3'
+        print('SELECCIONÓ TIJERA')
+    def manda_info():
+        ...
     
 try:
     s.connect((server_host, server_port))
@@ -73,7 +78,7 @@ except ConnectionRefusedError:
 if __name__ == '__main__':
 
     app = QApplication()
-    window = QtWindow()
+    window = QtWindow('0', 1)
     window.show()
     sys.exit(app.exec_())
 

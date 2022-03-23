@@ -48,6 +48,7 @@ def hilo_cliente(sock, noCliente):
         res = str(sock.recv(25))
         #print(res)
         resJuego = res[21]
+        noJuegos = res[16]
         
         if noConexiones == 2:
             disponible = '1'
