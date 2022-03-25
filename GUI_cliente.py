@@ -1,8 +1,10 @@
 
+from pickle import TRUE
 from socket import socket
+from threading import Thread, Lock
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PROYECTO_2 import Ui_VENTANA_PRINCIPAL
-import sys
+import sys, time
 
 MAX_JUEGOS = 5
 
@@ -11,14 +13,11 @@ server_host = 'localhost'
 server_port = 9999
 respuestaEnviar = ['0', '0', '0']
 record = [0, 0, 0]
-#noJuegos = 0
-#respuesta = '0'
 jugando = False
 
 class QtWindow(QMainWindow):
     
     def __init__(self, respuesta, noJuegos):
-
         super(QtWindow, self).__init__()
         self.ui = Ui_VENTANA_PRINCIPAL()
         self.ui.setupUi(self)
@@ -30,19 +29,12 @@ class QtWindow(QMainWindow):
         self.ui.TIJERA.clicked.connect(self.botonTijera)
         self.respuesta = respuesta
         self.noJuegos = noJuegos
-    
-    # def get_respuesta(self):
-    #     return self.respuesta 
-
-    # def set_respuesta(self, r):
-    #     self.respuesta = r
         
     def botondejugar(self):
         if not self.respuesta == '0':
             if self.noJuegos < MAX_JUEGOS:
-                msg = f'C[1]: DE:1|JJ:{self.noJuegos}|RE:{self.respuesta}'
+                msg = f'C[x]: DE:1|JJ:{self.noJuegos}|RE:{self.respuesta}'
                 s.send(msg.encode())
-                print(msg)
                 print(f'Mandaste tu respuesta: {msg}.') 
                 self.noJuegos += 1
             else:
@@ -56,24 +48,31 @@ class QtWindow(QMainWindow):
 
     def botonPiedra(self):
         self.respuesta = '1'
-        print('SELECCIONÓ PIEDRA')
+        print('Seleccionaste piedra')
  
     def botonPapel(self):
         self.respuesta = '2'
-        print('SELECCIONÓ PAPEL') 
+        print('Seleccionaste papel') 
 
     def botonTijera(self):
         self.respuesta = '3'
-        print('SELECCIONÓ TIJERA')
-    def manda_info():
-        ...
-    
+        print('Seleccionaste tijera')
+
 try:
     s.connect((server_host, server_port))
 except ConnectionRefusedError:
     print('El servidor no esta activo')
     print('Saliendo ...')
     sys.exit()
+
+# def lee_servidor():
+#     salir = False
+#     while not salir:
+#         res = s.recv(25).decode()
+#         clientNo = res[4]
+#         time.sleep(3)
+#         print(res)
+
 
 if __name__ == '__main__':
 

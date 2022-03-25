@@ -15,15 +15,14 @@ noConexiones = 0
 resClientes = ['0', '0', '0']   # RespuestaC1, RespuestaC2, Resultado 
 recordC1 = [0, 0, 0]            # Ganado, empatado, perdido
 recordC2 = [0, 0, 0]            # Ganado, empatado, perdido
-jugando = False
+disponible = '0'
 noConexiones = 0
 noJuegos = 0
-prueba = {'0':'0', '1':'Piedra', '2':'Papel', '3':'Tijera'}
 
 def hilo_imp():
     while True:
         time.sleep(5)
-        if jugando == True and noJuegos < MAX_JUEGOS:
+        if disponible == '1' and noJuegos < MAX_JUEGOS:
             if resClientes[0] == resClientes[1]:    # Si hay EMPATE
                 resClientes[2] = '-'
                 recordC1[1] += 1
@@ -53,47 +52,64 @@ def hilo_imp():
                 i = 0
             noJuegos = 0
         
-        print(f'C1: {prueba[resClientes[0]]} G:{recordC1[0]} E:{recordC1[1]} P:{recordC1[2]} |'
-              f' {noJuegos} | C2: {prueba[resClientes[1]]}, G:{recordC2[0]} E:{recordC2[1]} P:{recordC2[2]}')
+        print(f'C1: {resClientes[0]}, G:{recordC1[0]} E:{recordC1[1]} P:{recordC1[2]} |'
+              f' {noJuegos} | C2: {resClientes[1]}, G:{recordC2[0]} E:{recordC2[1]} P:{recordC2[2]}')
 
 def hilo_cliente(sock, noCliente):
 
-    msg = f'Cliente[{noCliente}] recibido.'
+    msg = f'[{noCliente}] Recibido\n'
     sock.send(msg.encode())
     print(msg)
 
     salir = False
+    #noJuegos = '0'
+    disponible = '0'
 
     while not salir:
         resultado = resClientes[2]
         res = str(sock.recv(25))
-
+        #print(res)
         resJuego = res[21]
-        resClientes[noCliente - 1] =  resJuego
+        #noJuegos = res[16]
+        
+        if noConexiones == 2:
+            disponible = '1'
+        elif noConexiones == 1:
+            disponible = '0'
             
         if noCliente == 2 and  resClientes[2] == 'x': # Invertir resultado a cliente 2
             resultado = '*' 
         elif noCliente == 2 and  resClientes[2] == '*': # Invertir resultado a cliente 2
             resultado = 'x'
 
-        msg = f'[{noCliente}] DE:0|JJ:{noJuegos}|RE:{resJuego}|RS:{resultado}'
+        msg = f'[{noCliente}] DE:{disponible}|JJ:{noJuegos}|RE:{resJuego}|RS:{resultado}'
         sock.send(msg.encode())
+
+        # if resJuego == '1':         # Pasa la respuesta a la lista resClientes
+        #     resClientes[noCliente - 1] =  'piedra'    
+        # elif resJuego == '2':
+        #     resClientes[noCliente - 1] = 'papel'
+        # else:
+        #     resClientes[noCliente - 1] = 'tijera'
+        resClientes[noCliente - 1] =  resJuego
+
         #print(f'Cliente[{res[4]}] selecciono {resClientes[noCliente - 1]}, en la ronda {noJuegos}.')
         time.sleep(5)
 
     sock.close()
 
 if __name__ == '__main__':
+    
 
     t3 = Thread(target = hilo_imp)
     t3.start()
 
     while True:
-        print(f'Esperando conexion... ')     
+        print(f'Esperando conexion...')     
         try:
             conn, addr = socketServidor.accept()
         except:
-            print('Conexion no disponible')
+            print('conexion no disponible')
             print('Saliendo ...')
             sys.exit()
         noConexiones += 1
