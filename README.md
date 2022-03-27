@@ -1,4 +1,4 @@
-# WEB SOCKETS - THREADING - Qt Designer.
+# Web sockets - Threading - Qt Designer.
 
 <div align="justify">
   Este repositorio tiene código para generar un servidor con tecnología web socket. Atiende los mensajes de 2 clientes, quienes juegan <b>piedra, papel o tijera</b>. La respuesta es enviada desde los clientes y el servidor es el encargado de hacer la lógica para escoger al ganador. 
