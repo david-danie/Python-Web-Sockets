@@ -1,10 +1,11 @@
-from re import M
+
 from socket import socket
 from threading import Thread, Lock
 import time
 import sys
-MAX_JUEGOS = 5
 # Se importa socket, Thread y time
+
+MAX_JUEGOS = 5
 
 socketServidor = socket()
 host = 'localhost'
@@ -20,7 +21,7 @@ noConexiones = 0
 noJuegos = 0
 prueba = {'0':'0', '1':'Piedra', '2':'Papel', '3':'Tijera'}
 
-def hilo_imp():
+def hilo_info():
     while True:
         time.sleep(5)
         if jugando == True and noJuegos < MAX_JUEGOS:
@@ -85,7 +86,7 @@ def hilo_cliente(sock, noCliente):
 
 if __name__ == '__main__':
 
-    t3 = Thread(target = hilo_imp)
+    t3 = Thread(target = hilo_info)
     t3.start()
 
     while True:

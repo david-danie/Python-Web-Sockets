@@ -1,10 +1,9 @@
 
-from pickle import TRUE
 from socket import socket
 from threading import Thread, Lock
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PROYECTO_2 import Ui_VENTANA_PRINCIPAL
-import sys, time
+import sys
 
 MAX_JUEGOS = 5
 
