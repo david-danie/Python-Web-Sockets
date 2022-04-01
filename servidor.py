@@ -9,7 +9,7 @@ MAX_JUEGOS = 5
 
 socketServidor = socket()
 host = 'localhost'
-port = 9999
+port = 3006
 socketServidor.bind((host, port))
 socketServidor.listen(5)
 noConexiones = 0

@@ -8,7 +8,7 @@ import sys, time
 MAX_JUEGOS = 5
 
 s = socket()
-server_host = '18.211.34.177'
+server_host = 'localhost'
 server_port = 3006
 respuestaEnviar = ['0', '0', '0']
 record = [0, 0, 0]
