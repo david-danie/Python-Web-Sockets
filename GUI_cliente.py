@@ -3,13 +3,13 @@ from socket import socket
 from threading import Thread, Lock
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PROYECTO_2 import Ui_VENTANA_PRINCIPAL
-import sys
+import sys, time
 
 MAX_JUEGOS = 5
 
 s = socket()
-server_host = 'localhost'
-server_port = 9999
+server_host = '18.211.34.177'
+server_port = 3006
 respuestaEnviar = ['0', '0', '0']
 record = [0, 0, 0]
 jugando = False
@@ -72,6 +72,8 @@ except ConnectionRefusedError:
 #         time.sleep(3)
 #         print(res)
 
+# th = Thread(target = lee_servidor)
+# th.start()
 
 if __name__ == '__main__':
 
